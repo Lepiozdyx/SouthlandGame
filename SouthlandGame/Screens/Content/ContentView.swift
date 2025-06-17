@@ -6,33 +6,33 @@ struct ContentView: View {
     var body: some View {
         Group {
             switch state.appState {
-            case .fetch:
+            case .request:
                 LoadingView()
                 
-            case .supp:
-                if let url = state.webManager.targetURL {
+            case .terms:
+                if let url = state.webManager.southlandURL {
                     WebViewManager(url: url, webManager: state.webManager)
                         .onAppear {
-                            ScreenManager.shared.unlockOrientation()
+                            ScreenManager.shared.unlock()
                         }
                     
                 } else {
                     WebViewManager(url: NetworkManager.initialURL, webManager: state.webManager)
                         .onAppear {
-                            ScreenManager.shared.unlockOrientation()
+                            ScreenManager.shared.unlock()
                         }
                 }
                 
-            case .final:
+            case .menu:
                 MenuView()
                     .preferredColorScheme(.light)
-                    .onAppear {
-                        ScreenManager.shared.lockLandscape()
-                    }
+//                    .onAppear {
+//                        ScreenManager.shared.lock()
+//                    }
             }
         }
         .onAppear {
-            state.stateCheck()
+            state.fetchState()
         }
     }
 }

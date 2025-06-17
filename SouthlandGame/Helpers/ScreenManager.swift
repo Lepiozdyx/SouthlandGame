@@ -1,24 +1,28 @@
 import SwiftUI
 
+class ScreenLockManager {
+    public static var orientationMask: UIInterfaceOrientationMask = .landscapeLeft
+    public static var isAutoRotationEnabled: Bool = false
+}
+
 class ScreenManager {
-    
     static let shared = ScreenManager()
     
     private init() {}
     
-    func unlockOrientation() {
-        ScreenLockHelper.orientationMask = .all
-        ScreenLockHelper.isAutoRotationEnabled = true
+    func unlock() {
+        ScreenLockManager.orientationMask = .all
+        ScreenLockManager.isAutoRotationEnabled = true
         UIViewController.attemptRotationToDeviceOrientation()
     }
     
-    func lockLandscape() {
-        ScreenLockHelper.orientationMask = .landscape
-        ScreenLockHelper.isAutoRotationEnabled = false
+    func lock() {
+        ScreenLockManager.orientationMask = .landscape
+        ScreenLockManager.isAutoRotationEnabled = false
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             if windowScene.interfaceOrientation.isPortrait {
-                ScreenLockHelper.isAutoRotationEnabled = true
+                ScreenLockManager.isAutoRotationEnabled = true
                 UIViewController.attemptRotationToDeviceOrientation()
                 
                 if #available(iOS 16.0, *) {
@@ -27,24 +31,19 @@ class ScreenManager {
                     UIDevice.current.setValue(UIDeviceOrientation.landscapeRight.rawValue, forKey: "orientation")
                 }
                 
-                ScreenLockHelper.isAutoRotationEnabled = false
+                ScreenLockManager.isAutoRotationEnabled = false
             }
         }
     }
 }
 
-class ScreenLockHelper {
-    public static var orientationMask: UIInterfaceOrientationMask = .landscapeLeft
-    public static var isAutoRotationEnabled: Bool = false
-}
-
+// MARK: - CustomHostingController
 class CustomHostingController<Content: View>: UIHostingController<Content> {
-    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return ScreenLockHelper.orientationMask
+        return ScreenLockManager.orientationMask
     }
 
     override var shouldAutorotate: Bool {
-        return ScreenLockHelper.isAutoRotationEnabled
+        return ScreenLockManager.isAutoRotationEnabled
     }
 }

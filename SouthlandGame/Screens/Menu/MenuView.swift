@@ -67,6 +67,8 @@ struct MenuView: View {
             }
         }
         .onAppear {
+            ScreenManager.shared.lock()
+            
             if appViewModel.musicEnabled {
                 SoundManager.shared.playBackgroundMusic()
             }
@@ -91,28 +93,28 @@ struct MenuView: View {
             SelectionView()
                 .environmentObject(appViewModel)
                 .onAppear {
-                    ScreenManager.shared.lockLandscape()
+                    ScreenManager.shared.lock()
                 }
         }
         .fullScreenCover(isPresented: $showShop) {
             ShopView()
                 .environmentObject(appViewModel)
                 .onAppear {
-                    ScreenManager.shared.lockLandscape()
+                    ScreenManager.shared.lock()
                 }
         }
         .fullScreenCover(isPresented: $showStatistics) {
             StatisticsView()
                 .environmentObject(appViewModel)
                 .onAppear {
-                    ScreenManager.shared.lockLandscape()
+                    ScreenManager.shared.lock()
                 }
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
                 .environmentObject(appViewModel)
                 .onAppear {
-                    ScreenManager.shared.lockLandscape()
+                    ScreenManager.shared.lock()
                 }
         }
     }

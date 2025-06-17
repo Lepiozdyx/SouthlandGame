@@ -4,8 +4,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        ScreenLockHelper.orientationMask = .landscape
-        ScreenLockHelper.isAutoRotationEnabled = false
+        ScreenLockManager.orientationMask = .landscape
+        ScreenLockManager.isAutoRotationEnabled = false
         
         if #available(iOS 14.0, *) {} else {
             let contentView = CustomHostingController(rootView: ContentView())

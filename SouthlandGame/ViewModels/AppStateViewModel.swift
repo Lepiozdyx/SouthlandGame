@@ -4,14 +4,13 @@ import Foundation
 final class AppStateViewModel: ObservableObject {
     
     enum AppState {
-        case fetch
-        case supp
-        case final
+        case request
+        case terms
+        case menu
     }
     
-    @Published private(set) var appState: AppState = .fetch
+    @Published private(set) var appState: AppState = .request
     let webManager: NetworkManager
-    
     private var timeoutTask: Task<Void, Never>?
     private let maxLoadingTime: TimeInterval = 10.0
     
@@ -19,26 +18,26 @@ final class AppStateViewModel: ObservableObject {
         self.webManager = webManager
     }
     
-    func stateCheck() {
+    func fetchState() {
         timeoutTask?.cancel()
         
         Task { @MainActor in
             do {
-                if webManager.targetURL != nil {
-                    updateState(.supp)
+                if webManager.southlandURL != nil {
+                    updateState(.terms)
                     return
                 }
                 
                 let shouldShowWebView = try await webManager.checkInitialURL()
                 
                 if shouldShowWebView {
-                    updateState(.supp)
+                    updateState(.terms)
                 } else {
-                    updateState(.final)
+                    updateState(.menu)
                 }
                 
             } catch {
-                updateState(.final)
+                updateState(.menu)
             }
         }
         
@@ -57,8 +56,8 @@ final class AppStateViewModel: ObservableObject {
             do {
                 try await Task.sleep(nanoseconds: UInt64(maxLoadingTime * 1_000_000_000))
                 
-                if self.appState == .fetch {
-                    self.appState = .final
+                if self.appState == .request {
+                    self.appState = .menu
                 }
             } catch {}
         }

@@ -84,7 +84,7 @@ struct SelectionView: View {
             GameView()
                 .environmentObject(appViewModel)
                 .onAppear {
-                    ScreenManager.shared.lockLandscape()
+                    ScreenManager.shared.lock()
                 }
         }
     }

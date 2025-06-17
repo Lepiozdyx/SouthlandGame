@@ -3,7 +3,7 @@ import SwiftUI
 @preconcurrency import WebKit
 
 class NetworkManager: ObservableObject {
-    @Published private(set) var targetURL: URL?
+    @Published private(set) var southlandURL: URL?
     
     static let initialURL = URL(string: "https://")!
     
@@ -13,7 +13,7 @@ class NetworkManager: ObservableObject {
     
     init(storage: UserDefaults = .standard) {
         self.storage = storage
-        loadProvenURL()
+        loadValidURL()
     }
     
     func checkURL(_ url: URL) {
@@ -26,7 +26,7 @@ class NetworkManager: ObservableObject {
         }
         
         storage.set(url.absoluteString, forKey: "savedurl")
-        targetURL = url
+        southlandURL = url
         didSaveURL = true
     }
     
@@ -69,10 +69,10 @@ class NetworkManager: ObservableObject {
         }
     }
     
-    private func loadProvenURL() {
+    private func loadValidURL() {
         if let urlString = storage.string(forKey: "savedurl") {
             if let url = URL(string: urlString) {
-                targetURL = url
+                southlandURL = url
                 didSaveURL = true
             } else {
                 print("Error: load - \(urlString)")
