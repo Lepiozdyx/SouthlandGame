@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  SouthlandGame
-//
-//  Created by Alex on 15.06.2025.
-//
-
 import SwiftUI
 
 struct ContentView: View {
