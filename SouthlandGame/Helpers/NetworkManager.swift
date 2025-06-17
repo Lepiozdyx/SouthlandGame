@@ -5,7 +5,7 @@ import SwiftUI
 class NetworkManager: ObservableObject {
     @Published private(set) var southlandURL: URL?
     
-    static let initialURL = URL(string: "https://")!
+    static let initialURL = URL(string: "https://southlandgame.top/start")!
     
     private let storage: UserDefaults
     private var didSaveURL = false
