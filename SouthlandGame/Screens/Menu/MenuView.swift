@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct MenuView: View {
+    @Environment(\.scenePhase) private var phase
+    @StateObject private var appViewModel = AppViewModel()
+    
     @State private var showGame = false
     @State private var showShop = false
     @State private var showStatistics = false
     @State private var showSettings = false
-    
-    @StateObject private var appViewModel = AppViewModel()
     
     var body: some View {
         ZStack {
@@ -70,28 +71,49 @@ struct MenuView: View {
                 SoundManager.shared.playBackgroundMusic()
             }
         }
-        .onChange(of: appViewModel.musicEnabled) { enabled in
-            if enabled {
-                SoundManager.shared.playBackgroundMusic()
-            } else {
+        .onChange(of: phase) { newPhase in
+            switch newPhase {
+            case .active:
+                if appViewModel.musicEnabled {
+                    SoundManager.shared.playBackgroundMusic()
+                } else {
+                    SoundManager.shared.stopBackgroundMusic()
+                }
+            case .background:
                 SoundManager.shared.stopBackgroundMusic()
+            case .inactive:
+                SoundManager.shared.stopBackgroundMusic()
+            @unknown default:
+                break
             }
         }
         .fullScreenCover(isPresented: $showGame) {
             SelectionView()
                 .environmentObject(appViewModel)
+                .onAppear {
+                    ScreenManager.shared.lockLandscape()
+                }
         }
         .fullScreenCover(isPresented: $showShop) {
             ShopView()
                 .environmentObject(appViewModel)
+                .onAppear {
+                    ScreenManager.shared.lockLandscape()
+                }
         }
         .fullScreenCover(isPresented: $showStatistics) {
             StatisticsView()
                 .environmentObject(appViewModel)
+                .onAppear {
+                    ScreenManager.shared.lockLandscape()
+                }
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
                 .environmentObject(appViewModel)
+                .onAppear {
+                    ScreenManager.shared.lockLandscape()
+                }
         }
     }
 }

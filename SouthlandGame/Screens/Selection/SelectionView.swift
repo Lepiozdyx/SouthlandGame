@@ -83,6 +83,9 @@ struct SelectionView: View {
         .fullScreenCover(isPresented: $showGame) {
             GameView()
                 .environmentObject(appViewModel)
+                .onAppear {
+                    ScreenManager.shared.lockLandscape()
+                }
         }
     }
 }
